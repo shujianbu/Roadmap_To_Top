@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>China Leaders Promotion</title>
+	<link rel="stylesheet" type="text/css" href="./promo.css" />
+    <script type="text/javascript" src="./js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="./js/d3.js"></script>
+	<script type="text/javascript" src="./js/d3.time.js"></script>
+	<script type="text/javascript" src="./js/d3.csv.js"></script>
+    <script type="text/javascript" src="./sigma.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Limelight' rel='stylesheet' type='text/css'>
+  </head>
+<body>
+<div id="main-wrapper">
+    <div id="content">
+    	<br >
+        <h1> <a href="./index.html"> Roadmap To The Top </a></h1>
+        <br > 
+        <div id="filters">
+			<a id="AVG">Average</a>
+            <a id="NL">National Level Leaders: 9</a>
+            <a id="DNL">Deputy National Level Leaders: 54</a>
+            <a id="ML">Ministerial Level: 91</a> 
+            <a id="DML">Deputy Ministerial Level: 250</a>
+            <a id="NParty">Non Party Affiliation: 45</a> 
+            <a id="Tuanpai">Tuanpai Affiliation: 101</a>
+
+			<div id="default-cap">
+				<p> </br>The infographic shows the promotion path of 404 leaders in the past 40 years.</p>
+			</div>
+			<div id="cap-content"></div>
+			
+        </div>
+		
+
+		<div id="blurb">
+            <div id="default-blurb">
+                <h2>CHINA Leaders</h2>
+                <p></br> Updated July 19, 2012. </br> 404 leaders in total. Click each line to read their brief profile.</p>
+            </div>
+            <div id="blurb-content"></div>
+        </div>
+        <div id="vis"></div>
+		<div id="illustration"> 
+			<p1></br>Rank 1: National Level</br></p1>
+			<p1>Rank 2: Deputy National Level</br></p1>
+			<p1>Rank 3: Ministerial Level</br></p1>
+			<p1>Rank 4: Deputy Ministerial Level</br></p1>
+			<p1>Rank 5: Bureau Level</br></p1>
+			<p1>Rank 6: Deputy Bureau Level</br></p1>
+			<p1>Rank 7: County Level</br></p1>
+			<p1>Rank 8: Deputy County Level</br></p1>	
+			<!-- <p1>Copyright <a href="http://www.jmsc.hku.hk/datachina">Data China | JMSC HKU </a></br></p1>			 -->
+		</div>
+
+    </div><!-- @end content -->
+
+    <br > <br > 
+    <h1> <a href="./index.html#Relation"> Guanxi Map</a></h1> 
+    <br >
+    <div class="span12 sigma-parent" id="sigma-example-parent">
+    	<div class="sigma-expand" id="sigma-example"></div>
+    </div>
+
+    <script src="./sigma.parseGexf.js"></script>
+	<script type="text/javascript">
+	function init() {
+	  // Instanciate sigma.js and customize rendering :
+	  var sigInst = sigma.init(document.getElementById('sigma-example')).drawingProperties({
+	    defaultLabelColor: '#fff',
+	    defaultLabelSize: 14,
+	    defaultLabelBGColor: '#fff',
+	    defaultLabelHoverColor: '#000',
+	    labelThreshold: 6,
+	    defaultEdgeType: 'curve'
+	  }).graphProperties({
+	    minNodeSize: 2,
+	    maxNodeSize: 5,
+	    minEdgeSize: 0.4,
+	    maxEdgeSize: 0.4
+	  }).mouseProperties({
+	    maxRatio: 32
+	  });
+	 
+	  // Parse a GEXF encoded file to fill the graph
+	  // (requires "sigma.parseGexf.js" to be included)
+	  sigInst.parseGexf('./leaders.gexf');
+	  // Bind events :
+	  var greyColor = '#444';
+	  sigInst.bind('overnodes',function(event){
+	    var nodes = event.content;
+	    var neighbors = {};
+	    sigInst.iterEdges(function(e){
+	      if(nodes.indexOf(e.source)<0 && nodes.indexOf(e.target)<0){
+	        if(!e.attr['grey']){
+	          e.attr['true_color'] = e.color;
+	          e.color = greyColor;
+	          e.attr['grey'] = 1;
+	        }
+	      }else{
+	        e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
+	        e.attr['grey'] = 0;
+	 
+	        neighbors[e.source] = 1;
+	        neighbors[e.target] = 1;
+	      }
+	    }).iterNodes(function(n){
+	      if(!neighbors[n.id]){
+	        if(!n.attr['grey']){
+	          n.attr['true_color'] = n.color;
+	          n.color = greyColor;
+	          n.attr['grey'] = 1;
+	        }
+	      }else{
+	        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+	        n.attr['grey'] = 0;
+	      }
+	    }).draw(2,2,2);
+	  }).bind('outnodes',function(){
+	    sigInst.iterEdges(function(e){
+	      e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
+	      e.attr['grey'] = 0;
+	    }).iterNodes(function(n){
+	      n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+	      n.attr['grey'] = 0;
+	    }).draw(2,2,2);
+	  });
+	  // Draw the graph :
+	  sigInst.draw();
+	}
+	 
+	if (document.addEventListener) {
+	  document.addEventListener("DOMContentLoaded", init, false);
+	} else {
+	  window.onload = init;
+	}
+	</script>
+
+</div><!-- @end #main-wrapper -->
+
+<script type="text/javascript" src="./promo.js"></script>
+
+</body>
+</html>
