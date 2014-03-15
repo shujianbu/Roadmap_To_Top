@@ -1,5 +1,10 @@
 Becoming President, China Style
 =============================
+
+![Result2](https://github.com/shujianbu/Roadmap_To_Top/blob/master/viz2.png?raw=true)
+![Result1](https://github.com/shujianbu/Roadmap_To_Top/blob/master/viz1.png?raw=true)
+
+
 - Summer Project | The Data Journalism Lab http://datalab.jmsc.hku.hk/ 
 - Hong Kong University's Journalism and Media Studies Center 
 - Visualization Page: http://shujianbu.github.com/Roadmap_To_Top/
